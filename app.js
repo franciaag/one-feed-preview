@@ -165,6 +165,7 @@ function renderFeed(errors = []) {
       ${p.cw ? `<div class="cw-banner">Content warning: ${esc(p.cw)}</div>` : ''}
       <div class="scene-text ${long ? 'long' : ''} ${p.cw ? 'cw-body hidden-cw' : ''}" data-cwbody="${i}">${esc(p.text.length > 500 ? p.text.slice(0, 500) + '...' : p.text)}</div>
       ${p.cw ? `<button class="reveal-btn" data-cwbtn="${i}">Show post</button>` : ''}
+      <button class="more-btn" data-more="${i}" hidden>Read more</button>
       <div class="card-meta">
         ${p.avatar ? `<img class="avatar" loading="lazy" src="${esc(p.avatar)}" alt="" onerror="this.remove()">` : ''}
         <div class="who"><div class="nm">${esc(p.name)}</div><div class="hd">${esc(p.handle)}</div></div>
@@ -180,6 +181,10 @@ function renderFeed(errors = []) {
     </div>
   </section>`;
   }).join('');
+  requestAnimationFrame(() => feed.querySelectorAll('.scene-text').forEach(el => {
+    const btn = feed.querySelector(`[data-more="${el.dataset.cwbody}"]`);
+    if (btn && el.scrollHeight > el.clientHeight + 4) btn.hidden = false;
+  }));
 }
 feed.addEventListener('click', e => {
   const sb = e.target.closest('.save-fab');
@@ -188,6 +193,8 @@ feed.addEventListener('click', e => {
   if (rv) { feed.querySelector(`[data-bg="${rv.dataset.reveal}"]`).classList.remove('blur-media'); rv.closest('.sensitive-wrap').remove(); return; }
   const cw = e.target.closest('[data-cwbtn]');
   if (cw) { feed.querySelector(`[data-cwbody="${cw.dataset.cwbtn}"]`).classList.remove('hidden-cw'); cw.remove(); return; }
+  const mr = e.target.closest('[data-more]');
+  if (mr) { openSheet('post', +mr.dataset.more); return; }
   const scene = e.target.closest('.scene');
   if (scene && scene.dataset.url) window.open(scene.dataset.url, '_blank', 'noopener');
 });
@@ -222,7 +229,7 @@ dock.addEventListener('click', e => {
 });
 
 /* ---------- sheets ---------- */
-function openSheet(kind) {
+function openSheet(kind, arg) {
   $('#sheet-wrap').classList.remove('hidden');
   const T = $('#sheet-title'), B = $('#sheet-body');
   if (kind === 'search') {
@@ -272,6 +279,14 @@ function openSheet(kind) {
       else return;
       store(LS_SOURCES, sources); openSheet('sources');
     });
+  }
+  if (kind === 'post') {
+    const p = state.posts[arg];
+    if (!p) return;
+    T.textContent = p.name || 'Post';
+    B.innerHTML = `<div class="post-full">${esc(p.text)}</div>
+      <div class="note" style="margin-top:12px">${esc(p.handle)} \u00b7 ${p.source === 'bsky' ? 'Bluesky' : 'Mastodon'}</div>
+      <a class="pill-btn" href="${esc(p.url)}" target="_blank" rel="noopener" style="text-decoration:none">Open original post</a>`;
   }
   if (kind === 'moments') {
     T.textContent = 'Moments';
