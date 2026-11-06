@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0d1420">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>One Feed</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<div id="bg"></div>
+<div id="scrim"></div>
+
+<header id="topbar" class="glass-bar">
+  <nav id="tabs">
+    <button class="tab" data-tab="following">Following</button>
+    <button class="tab active" data-tab="foryou">For you</button>
+  </nav>
+  <div class="top-actions">
+    <button id="btn-refresh" class="icon-btn" aria-label="Refresh" title="Refresh"></button>
+    <button id="btn-search" class="icon-btn" aria-label="Search" title="Search"></button>
+  </div>
+</header>
+
+<main id="feed" aria-live="polite"></main>
+<div id="feed-status"></div>
+
+<button id="dock-toggle" class="glass" aria-label="Open actions">
+  <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="7.4" height="7.4" rx="2"/><rect x="13.1" y="3.5" width="7.4" height="7.4" rx="2"/><rect x="13.1" y="13.1" width="7.4" height="7.4" rx="2"/><rect x="3.5" y="13.1" width="7.4" height="7.4" rx="2"/></svg>
+</button>
+
+<div id="dock" class="glass-panel hidden" role="menu">
+  <div class="dock-grid">
+    <button class="dock-item" data-act="search"><span class="di-ic" data-ic="search"></span><span class="di-lb">Search</span></button>
+    <button class="dock-item" data-act="saved"><span class="di-ic" data-ic="saved"></span><span class="di-lb">Saved</span></button>
+    <button class="dock-item" data-act="camera"><span class="di-ic" data-ic="camera"></span><span class="di-lb">Camera</span></button>
+    <button class="dock-item" data-act="sources"><span class="di-ic" data-ic="sources"></span><span class="di-lb">Sources</span></button>
+    <button class="dock-item" data-act="refresh"><span class="di-ic" data-ic="refresh"></span><span class="di-lb">Refresh</span></button>
+    <button class="dock-item" data-act="moments"><span class="di-ic" data-ic="moments"></span><span class="di-lb">Moments</span></button>
+    <button class="dock-item" data-act="about"><span class="di-ic" data-ic="about"></span><span class="di-lb">About</span></button>
+    <button class="dock-item" data-act="close"><span class="di-ic" data-ic="close"></span><span class="di-lb">Close</span></button>
+  </div>
+</div>
+
+<div id="sheet-wrap" class="hidden">
+  <div id="sheet" class="glass-panel">
+    <div id="sheet-head">
+      <h3 id="sheet-title"></h3>
+      <button id="sheet-close" class="icon-btn" aria-label="Close"></button>
+    </div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<input type="file" id="camera-input" accept="image/*" class="hidden">
+<script src="app.js"></script>
+</body>
+</html>
